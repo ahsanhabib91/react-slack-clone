@@ -10,7 +10,6 @@ import {
   Icon
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import Register from "./Register";
 
 class Login extends React.Component {
   state = {
