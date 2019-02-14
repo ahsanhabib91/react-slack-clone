@@ -3,39 +3,46 @@ import ReactDOM from "react-dom";
 import { createStore } from "redux";
 import { Provider, connect } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-
-import * as serviceWorker from "./serviceWorker";
-import App from "./components/App";
-import Login from "./components/Auth/Login";
-import Register from "./components/Auth/Register";
-import firebase from "./firebase";
-import rootReducer from "./reducers";
-import { setUser } from "./actions";
-
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   withRouter
 } from "react-router-dom";
+
+import * as serviceWorker from "./serviceWorker";
+import App from "./components/App";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import Spinner from "./components/Spinner";
+
+import firebase from "./firebase";
+import rootReducer from "./reducers";
+import { setUser } from "./actions";
+
 // import "semantic-ui-css/semantic.min.css";
 
 const store = createStore(rootReducer, composeWithDevTools());
 
 class Root extends React.Component {
   componentDidMount() {
+    console.log(this.props.isLoading);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         console.log(user);
         this.props.setUser(user);
         this.props.history.push("/");
       } else {
+        // this.props.setUser(user);
         this.props.history.push("/login");
       }
     });
   }
   render() {
-    return (
+    console.log("Root render()");
+    return this.props.isLoading ? (
+      <Spinner />
+    ) : (
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/login" component={Login} />
@@ -45,9 +52,17 @@ class Root extends React.Component {
   }
 }
 
+// const mapStateToProps = state => {
+//   return { isLoading: state.user.isLoading };
+// };
+// OR
+const mapStateToProps = state => ({
+  isLoading: state.user.isLoading
+});
+
 const RootWithAuth = withRouter(
   connect(
-    null,
+    mapStateToProps,
     { setUser }
   )(Root)
 );
