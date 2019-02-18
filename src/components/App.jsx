@@ -1,17 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import "./App.css";
-import { Button, Grid } from "semantic-ui-react";
-import firebase from "../firebase";
+import { Grid } from "semantic-ui-react";
 import ColorPanel from "./ColorPanel/ColorPanel";
 import SidePanel from "./SidePanel/SidePanel";
 import Messages from "./Messages/Messages";
 import MetaPanel from "./MetaPanel/MetaPanel";
 
-const App = () => {
+const App = ({ currentUser }) => {
   return (
     <Grid columns="equal" className="app" style={{ baclGround: "#eee" }}>
       <ColorPanel />
-      <SidePanel />
+      <SidePanel currentUser={currentUser} />
+
       <Grid.Column style={{ marginLeft: 320 }}>
         <Messages />
       </Grid.Column>
@@ -22,26 +23,8 @@ const App = () => {
   );
 };
 
-// class App extends Component {
-// 	logout = () => {
-// 		firebase
-// 			.auth()
-// 			.signOut()
-// 			.then(data => {
-// 				console.log("Signout Successfully", data);
-// 				this.props.history.push("/login");
-// 			})
-// 			.catch(error => {
-// 				console.error(error);
-// 			});
-// 	};
-// 	render() {
-// 		return (
-// 			<Button onClick={this.logout} color="violet" fluid size="large">
-// 				Logout
-// 			</Button>
-// 		);
-// 	}
-// }
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
 
-export default App;
+export default connect(mapStateToProps)(App);
