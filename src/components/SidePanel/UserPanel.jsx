@@ -42,7 +42,7 @@ class UserPanel extends React.Component {
   };
 
   render() {
-    console.log("UserPanel render()", this.props.currentUser);
+    // console.log("UserPanel render()", this.props.currentUser);
     const { user } = this.state;
     return (
       <Grid style={{ background: "#4c3c4c" }}>
