@@ -55,24 +55,23 @@ class MessageForm extends React.Component {
   };
 
   render() {
-    const { errors } = this.state;
-    const str = "Hello world, welcome to the universe.";
-    const n = str.includes("world");
-    console.log(errors);
-    console.log(n);
+    const { errors, message, loading } = this.state;
     return (
       <Segment className="message__form">
         <Input
           fluid
           name="message"
           onChange={this.handleChange}
+          value={message}
           style={{ marginBottom: "0.7em" }}
           label={<Button icon="add" />}
           labelPosition="left"
           placeholder="Write your message"
-          //   className={
-          //     errors.some(error => error.includes("message")) ? "error" : ""
-          //   }
+          className={
+            errors.some(error => error.message.includes("message"))
+              ? "error"
+              : ""
+          }
           value={this.state.message}
         />
         <Button.Group icon widths="2">
@@ -82,6 +81,7 @@ class MessageForm extends React.Component {
             labelPosition="right"
             icon="edit"
             onClick={this.sendMessage}
+            disabled={loading}
           />
           <Button
             color="teal"
