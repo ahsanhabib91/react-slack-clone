@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Comment } from "semantic-ui-react";
+import { Segment, Comment, Ref } from "semantic-ui-react";
 import firebase from "../../firebase";
 import MessagesHeader from "./MessagesHeader";
 import MessageForm from "./MessageForm";
@@ -14,12 +14,22 @@ class Messages extends React.Component {
     user: this.props.currentUser
   };
 
+  createdRef = React.createRef();
+
   componentDidMount() {
     const { channel, user } = this.state;
 
     if (channel && user) {
       this.addListeners(channel.id);
     }
+  }
+
+  scrollToBottom = () => {
+    this.createdRef.current.scrollTop = this.createdRef.current.scrollHeight;
+  };
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   // componentWillUnmount() {
@@ -44,6 +54,8 @@ class Messages extends React.Component {
         messages: loadMessages,
         messagesLoading: false
       });
+      this.scrollToBottom();
+      console.log(this.createdRef);
     });
   };
 
@@ -67,9 +79,11 @@ class Messages extends React.Component {
         <MessagesHeader />
 
         <Segment>
-          <Comment.Group className="messages">
-            {this.displayMessages(messages)}
-          </Comment.Group>
+          <Ref innerRef={this.createdRef}>
+            <Comment.Group className="messages">
+              {this.displayMessages(messages)}
+            </Comment.Group>
+          </Ref>
         </Segment>
 
         <MessageForm
