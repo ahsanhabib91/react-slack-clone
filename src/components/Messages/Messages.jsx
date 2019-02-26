@@ -25,7 +25,9 @@ class Messages extends React.Component {
   }
 
   scrollToBottom = () => {
-    this.createdRef.current.scrollTop = this.createdRef.current.scrollHeight;
+    if (this.createdRef.current) {
+      this.createdRef.current.scrollTop = this.createdRef.current.scrollHeight;
+    }
   };
 
   componentDidUpdate() {
@@ -55,7 +57,6 @@ class Messages extends React.Component {
         messagesLoading: false
       });
       this.scrollToBottom();
-      console.log(this.createdRef);
     });
   };
 
